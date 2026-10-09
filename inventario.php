@@ -1,5 +1,5 @@
 <?php
-$pageTitle = "Gestión de Inventario - Ferretería De La Rosa";
+$pageTitle = "Gestión de Inventario - FerreMax";
 $extraCss = "productos.css";
 require_once __DIR__ . '/header.php';
 
@@ -50,49 +50,49 @@ if (empty($inventario)) {
 ?>
 
 <div class="catalog-hero">
-    <div class="hero-badge"><i class="fa-solid fa-warehouse"></i> Módulo Inventario</div>
+    <div class="hero-badge">Módulo Inventario</div>
     <h2>Control de Inventario y Alertas de Stock</h2>
     <p>Consulta las existencias, registra productos y supervisa las alertas de bajo inventario.</p>
 </div>
 
 <?php if ($mensaje): ?>
     <div style="background: rgba(16,185,129,0.15); color: #10B981; border: 1px solid #10B981; padding: 0.75rem 1rem; border-radius: 8px; margin-bottom: 1.5rem;">
-        <i class="fa-solid fa-circle-check"></i> <?php echo htmlspecialchars($mensaje); ?>
+        <?php echo htmlspecialchars($mensaje); ?>
     </div>
 <?php endif; ?>
 
 <?php if ($error): ?>
     <div style="background: rgba(239,68,68,0.15); color: #EF4444; border: 1px solid #EF4444; padding: 0.75rem 1rem; border-radius: 8px; margin-bottom: 1.5rem;">
-        <i class="fa-solid fa-circle-exclamation"></i> <?php echo htmlspecialchars($error); ?>
+        <?php echo htmlspecialchars($error); ?>
     </div>
 <?php endif; ?>
 
 <?php if (isset($_SESSION['usuario_id']) && ($_SESSION['usuario_rol'] ?? '') === 'admin'): ?>
-<div style="background: var(--bg-card); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 14px; margin-bottom: 2rem;">
-    <h3 style="color: var(--text-bright); margin-bottom: 1rem;"><i class="fa-solid fa-plus-circle" style="color: var(--accent);"></i> Registrar / Actualizar Producto</h3>
+<div style="background: var(--bg-card); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
+    <h3 style="color: var(--text-bright); margin-bottom: 1rem;">Registrar / Actualizar Producto</h3>
     <form action="inventario.php" method="POST" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
         <div>
-            <label style="font-size:0.85rem; color: var(--text-muted);">Código</label>
+            <label style="font-size:0.85rem; color: var(--gray-muted);">Código</label>
             <input type="text" name="codigo" placeholder="PROD-001" required style="width:100%; background: #0F172A; border:1px solid var(--border-color); color:#fff; padding:0.6rem; border-radius:6px;">
         </div>
         <div>
-            <label style="font-size:0.85rem; color: var(--text-muted);">Nombre Producto</label>
+            <label style="font-size:0.85rem; color: var(--gray-muted);">Nombre Producto</label>
             <input type="text" name="nombre" placeholder="Nombre" required style="width:100%; background: #0F172A; border:1px solid var(--border-color); color:#fff; padding:0.6rem; border-radius:6px;">
         </div>
         <div>
-            <label style="font-size:0.85rem; color: var(--text-muted);">Precio ($)</label>
+            <label style="font-size:0.85rem; color: var(--gray-muted);">Precio ($)</label>
             <input type="number" step="0.01" name="precio" placeholder="0.00" required style="width:100%; background: #0F172A; border:1px solid var(--border-color); color:#fff; padding:0.6rem; border-radius:6px;">
         </div>
         <div>
-            <label style="font-size:0.85rem; color: var(--text-muted);">Stock Actual</label>
+            <label style="font-size:0.85rem; color: var(--gray-muted);">Stock Actual</label>
             <input type="number" name="stock" placeholder="0" required style="width:100%; background: #0F172A; border:1px solid var(--border-color); color:#fff; padding:0.6rem; border-radius:6px;">
         </div>
         <div>
-            <label style="font-size:0.85rem; color: var(--text-muted);">Stock Mínimo Alerta</label>
+            <label style="font-size:0.85rem; color: var(--gray-muted);">Stock Mínimo Alerta</label>
             <input type="number" name="stock_minimo" value="5" required style="width:100%; background: #0F172A; border:1px solid var(--border-color); color:#fff; padding:0.6rem; border-radius:6px;">
         </div>
         <div>
-            <label style="font-size:0.85rem; color: var(--text-muted);">Categoría</label>
+            <label style="font-size:0.85rem; color: var(--gray-muted);">Categoría</label>
             <select name="categoria" style="width:100%; background: #0F172A; border:1px solid var(--border-color); color:#fff; padding:0.6rem; border-radius:6px;">
                 <option value="plomeria">Plomería</option>
                 <option value="herramientas">Herramientas</option>
@@ -101,15 +101,15 @@ if (empty($inventario)) {
             </select>
         </div>
         <div style="grid-column: 1 / -1; margin-top: 0.5rem;">
-            <button type="submit" style="background: var(--primary); color:#fff; border:none; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight:700; cursor:pointer;">
-                <i class="fa-solid fa-save"></i> Guardar Producto
+            <button type="submit" style="background: var(--primary); color:#fff; border:none; padding: 0.75rem 1.5rem; border-radius: 6px; font-weight:700; cursor:pointer;">
+                Guardar Producto
             </button>
         </div>
     </form>
 </div>
 <?php endif; ?>
 
-<div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 14px; overflow-x: auto;">
+<div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; overflow-x: auto;">
     <table style="width: 100%; border-collapse: collapse; text-align: left; color: var(--text-main);">
         <thead>
             <tr style="background: #0F172A; border-bottom: 1px solid var(--border-color);">
@@ -134,11 +134,11 @@ if (empty($inventario)) {
                 <td style="padding: 1rem;">
                     <?php if ($bajoStock): ?>
                         <span style="background: rgba(239, 68, 68, 0.2); color: #EF4444; padding: 0.3rem 0.75rem; border-radius: 50px; font-size: 0.8rem; font-weight: 700; border: 1px solid rgba(239, 68, 68, 0.4);">
-                            <i class="fa-solid fa-triangle-exclamation"></i> Bajo Inventario (Min: <?php echo $item['stock_minimo']; ?>)
+                            Bajo Inventario (Min: <?php echo $item['stock_minimo']; ?>)
                         </span>
                     <?php else: ?>
                         <span style="background: rgba(16, 185, 129, 0.2); color: #10B981; padding: 0.3rem 0.75rem; border-radius: 50px; font-size: 0.8rem; font-weight: 700;">
-                            <i class="fa-solid fa-circle-check"></i> Stock Óptimo
+                            Stock Óptimo
                         </span>
                     <?php endif; ?>
                 </td>

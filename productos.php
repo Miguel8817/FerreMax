@@ -1,5 +1,5 @@
 <?php
-$pageTitle = "Catálogo de Productos - Ferretería De La Rosa";
+$pageTitle = "Catálogo de Productos - FerreMax";
 $extraCss = "productos.css";
 $extraJs = "productos.js";
 require_once __DIR__ . '/header.php';
@@ -47,15 +47,12 @@ if (empty($productos_lista)) {
 ?>
 
 <section class="catalog-hero">
-    <div class="hero-badge">
-        <i class="fa-solid fa-store"></i> Catálogo de Exposición
-    </div>
+    <div class="hero-badge">Catálogo de Exposición</div>
     <h2>Catálogo General de Productos</h2>
     <p>Conoce la variedad de herramientas, materiales de plomería y equipos de alta calidad disponibles en nuestra ferretería.</p>
 
     <div class="filter-bar">
         <div class="search-box">
-            <i class="fa-solid fa-magnifying-glass search-icon"></i>
             <input type="text" id="searchInput" class="search-input" placeholder="Buscar por nombre o descripción...">
         </div>
 
@@ -85,9 +82,7 @@ if (empty($productos_lista)) {
                         <span class="price-label">Precio Referencial</span>
                         <span class="price-value">$<?php echo number_format((float)$prod['precio'], 2); ?></span>
                     </div>
-                    <div class="stock-indicator">
-                        <span class="stock-dot"></span> En Tienda
-                    </div>
+                    <div class="stock-indicator">En Tienda</div>
                 </div>
             </div>
         </article>

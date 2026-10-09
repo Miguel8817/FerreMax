@@ -10,10 +10,10 @@ require_once __DIR__ . '/header.php';
     
     <div class="hero-buttons">
         <a href="productos.php" class="btn-hero btn-hero-primary">
-            <i class="fa-solid fa-boxes-stacked"></i> Ver Catálogo
+            Ver Catálogo
         </a>
         <a href="ofertas.php" class="btn-hero btn-hero-outline">
-            <i class="fa-solid fa-tags"></i> Ver Ofertas
+            Ver Ofertas
         </a>
     </div>
 </section>

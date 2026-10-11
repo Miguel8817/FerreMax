@@ -2,22 +2,16 @@
 $pageTitle = "Gestión de Usuarios y Roles - Ferretería De La Rosa";
 $extraCss = "login.css";
 require_once __DIR__ . '/header.php';
-
-// Verificar permisos de Administrador
 if (!isset($_SESSION['usuario_id']) || ($_SESSION['usuario_rol'] ?? '') !== 'admin') {
     echo "<div style='text-align:center; padding:3rem;'><h2>Acceso Denegado</h2><p>Solo el Administrador del sistema puede gestionar usuarios y roles.</p><a href='index.php' class='btn-nav-accent' style='display:inline-block; margin-top:1rem; padding:0.6rem 1.2rem; border-radius:8px;'>Volver al Inicio</a></div>";
     require_once __DIR__ . '/footer.php';
     exit;
 }
-
 $mensaje = "";
 $error = "";
-
-// Cambiar Rol de Usuario
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['nuevo_rol'])) {
     $uid  = (int)$_POST['user_id'];
     $nrol = $_POST['nuevo_rol'];
-
     if ($db_connected) {
         $stmt = $conn->prepare("UPDATE usuarios SET rol = ? WHERE id = ?");
         $stmt->bind_param("si", $nrol, $uid);
@@ -30,8 +24,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['nu
         $mensaje = "Rol actualizado en modo demo.";
     }
 }
-
-// Cargar Usuarios
 $usuariosList = [];
 if ($db_connected) {
     $res = $conn->query("SELECT id, nombre, email, rol, creado_en FROM usuarios ORDER BY id ASC");
@@ -39,24 +31,21 @@ if ($db_connected) {
 }
 if (empty($usuariosList)) {
     $usuariosList = [
-        ['id' => 1, 'nombre' => 'Emeli Administradora', 'email' => 'admin@ferreteria.com', 'rol' => 'admin', 'creado_en' => date('Y-m-d H:i:s')],
+        ['id' => 1, 'nombre' => 'Emely Administradora', 'email' => 'admin@ferreteria.com', 'rol' => 'admin', 'creado_en' => date('Y-m-d H:i:s')],
         ['id' => 2, 'nombre' => 'Carlos Empleado', 'email' => 'empleado@ferreteria.com', 'rol' => 'empleado', 'creado_en' => date('Y-m-d H:i:s')]
     ];
 }
 ?>
-
 <div class="catalog-hero" style="margin-bottom: 2rem;">
     <div class="hero-badge"><i class="fa-solid fa-user-gear"></i> Control de Acceso y Roles</div>
     <h2>Gestión de Usuarios del Sistema</h2>
     <p>Asigna o modifica los permisos de Administrador y Empleado dentro de la aplicación.</p>
 </div>
-
 <?php if ($mensaje): ?>
     <div style="background: rgba(16,185,129,0.15); color: #10B981; border: 1px solid #10B981; padding: 0.75rem 1rem; border-radius: 8px; margin-bottom: 1.5rem;">
         <i class="fa-solid fa-circle-check"></i> <?php echo htmlspecialchars($mensaje); ?>
     </div>
 <?php endif; ?>
-
 <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 14px; overflow-x: auto;">
     <table style="width: 100%; border-collapse: collapse; text-align: left; color: var(--text-main);">
         <thead>
@@ -102,5 +91,4 @@ if (empty($usuariosList)) {
         </tbody>
     </table>
 </div>
-
 <?php require_once __DIR__ . '/footer.php'; ?>

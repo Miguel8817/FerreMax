@@ -3,8 +3,6 @@ $pageTitle = "Catálogo de Productos - FerreMax";
 $extraCss = "productos.css";
 $extraJs = "productos.js";
 require_once __DIR__ . '/header.php';
-
-// Cargar productos de la base de datos MySQL si está conectada
 $productos_lista = [];
 if (isset($db_connected) && $db_connected) {
     $res = $conn->query("SELECT * FROM productos ORDER BY id DESC");
@@ -14,8 +12,6 @@ if (isset($db_connected) && $db_connected) {
         }
     }
 }
-
-// Fallback por defecto si no hay conexión a BD MySQL aún
 if (empty($productos_lista)) {
     $productos_lista = [
         [
@@ -45,17 +41,14 @@ if (empty($productos_lista)) {
     ];
 }
 ?>
-
 <section class="catalog-hero">
     <div class="hero-badge">Catálogo de Exposición</div>
     <h2>Catálogo General de Productos</h2>
     <p>Conoce la variedad de herramientas, materiales de plomería y equipos de alta calidad disponibles en nuestra ferretería.</p>
-
     <div class="filter-bar">
         <div class="search-box">
             <input type="text" id="searchInput" class="search-input" placeholder="Buscar por nombre o descripción...">
         </div>
-
         <div class="category-tabs">
             <button class="tab-btn active" data-category="all">Todos los Productos</button>
             <button class="tab-btn" data-category="plomeria">Plomería</button>
@@ -63,7 +56,6 @@ if (empty($productos_lista)) {
         </div>
     </div>
 </section>
-
 <div class="products-grid">
     <?php foreach ($productos_lista as $prod): ?>
         <article class="product-card" data-category="<?php echo htmlspecialchars($prod['categoria']); ?>">
@@ -88,5 +80,4 @@ if (empty($productos_lista)) {
         </article>
     <?php endforeach; ?>
 </div>
-
 <?php require_once __DIR__ . '/footer.php'; ?>

@@ -2,11 +2,8 @@
 $pageTitle = "Gestión de Inventario - FerreMax";
 $extraCss = "productos.css";
 require_once __DIR__ . '/header.php';
-
 $mensaje = "";
 $error = "";
-
-// Permitir guardar o modificar stock
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['usuario_id'])) {
     $codigo   = trim($_POST['codigo'] ?? '');
     $nombre   = trim($_POST['nombre'] ?? '');
@@ -14,7 +11,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['usuario_id'])) {
     $stock    = (int)($_POST['stock'] ?? 0);
     $minimo   = (int)($_POST['stock_minimo'] ?? 5);
     $cat      = trim($_POST['categoria'] ?? 'general');
-
     if (!empty($codigo) && !empty($nombre)) {
         if ($db_connected) {
             $stmt = $conn->prepare("INSERT INTO productos (codigo, nombre, precio, stock, stock_minimo, categoria) VALUES (?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE nombre=?, precio=?, stock=?, stock_minimo=?, categoria=?");
@@ -31,8 +27,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['usuario_id'])) {
         $error = "El código y el nombre son obligatorios.";
     }
 }
-
-// Cargar inventario
 $inventario = [];
 if ($db_connected) {
     $res = $conn->query("SELECT * FROM productos ORDER BY stock ASC");
@@ -48,25 +42,21 @@ if (empty($inventario)) {
     ];
 }
 ?>
-
 <div class="catalog-hero">
     <div class="hero-badge">Módulo Inventario</div>
     <h2>Control de Inventario y Alertas de Stock</h2>
     <p>Consulta las existencias, registra productos y supervisa las alertas de bajo inventario.</p>
 </div>
-
 <?php if ($mensaje): ?>
     <div style="background: rgba(16,185,129,0.15); color: #10B981; border: 1px solid #10B981; padding: 0.75rem 1rem; border-radius: 8px; margin-bottom: 1.5rem;">
         <?php echo htmlspecialchars($mensaje); ?>
     </div>
 <?php endif; ?>
-
 <?php if ($error): ?>
     <div style="background: rgba(239,68,68,0.15); color: #EF4444; border: 1px solid #EF4444; padding: 0.75rem 1rem; border-radius: 8px; margin-bottom: 1.5rem;">
         <?php echo htmlspecialchars($error); ?>
     </div>
 <?php endif; ?>
-
 <?php if (isset($_SESSION['usuario_id']) && ($_SESSION['usuario_rol'] ?? '') === 'admin'): ?>
 <div style="background: var(--bg-card); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
     <h3 style="color: var(--text-bright); margin-bottom: 1rem;">Registrar / Actualizar Producto</h3>
@@ -108,7 +98,6 @@ if (empty($inventario)) {
     </form>
 </div>
 <?php endif; ?>
-
 <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; overflow-x: auto;">
     <table style="width: 100%; border-collapse: collapse; text-align: left; color: var(--text-main);">
         <thead>
@@ -147,5 +136,4 @@ if (empty($inventario)) {
         </tbody>
     </table>
 </div>
-
 <?php require_once __DIR__ . '/footer.php'; ?>

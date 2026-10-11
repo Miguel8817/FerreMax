@@ -2,24 +2,19 @@
 $pageTitle = "Gestión de Clientes y Proveedores - Ferretería De La Rosa";
 $extraCss = "productos.css";
 require_once __DIR__ . '/header.php';
-
 if (!isset($_SESSION['usuario_id'])) {
     echo "<div style='text-align:center; padding:3rem;'><h2>Acceso Restringido</h2><p>Inicia sesión para acceder a este módulo.</p><a href='login.php' class='btn-nav-accent' style='display:inline-block; margin-top:1rem; padding:0.6rem 1.2rem; border-radius:8px;'>Iniciar Sesión</a></div>";
     require_once __DIR__ . '/footer.php';
     exit;
 }
-
 $mensaje = "";
 $error = "";
-
-// Registrar Cliente
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nombre    = trim($_POST['nombre'] ?? '');
     $documento = trim($_POST['documento'] ?? '');
     $telefono  = trim($_POST['telefono'] ?? '');
     $email     = trim($_POST['email'] ?? '');
     $direccion = trim($_POST['direccion'] ?? '');
-
     if (!empty($nombre)) {
         if ($db_connected) {
             $stmt = $conn->prepare("INSERT INTO clientes (nombre, documento, telefono, email, direccion) VALUES (?, ?, ?, ?, ?)");
@@ -36,8 +31,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = "El nombre del cliente es obligatorio.";
     }
 }
-
-// Cargar Clientes
 $clientes = [];
 if ($db_connected) {
     $res = $conn->query("SELECT * FROM clientes ORDER BY id DESC");
@@ -50,19 +43,16 @@ if (empty($clientes)) {
     ];
 }
 ?>
-
 <div class="catalog-hero">
     <div class="hero-badge"><i class="fa-solid fa-users"></i> Módulo Gestión de Clientes</div>
     <h2>Directorio de Clientes y Proveedores</h2>
     <p>Registra y consulta el historial de clientes para la emisión de facturas y atención personalizada.</p>
 </div>
-
 <?php if ($mensaje): ?>
     <div style="background: rgba(16,185,129,0.15); color: #10B981; border: 1px solid #10B981; padding: 0.75rem 1rem; border-radius: 8px; margin-bottom: 1.5rem;">
         <i class="fa-solid fa-circle-check"></i> <?php echo htmlspecialchars($mensaje); ?>
     </div>
 <?php endif; ?>
-
 <div style="background: var(--bg-card); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 14px; margin-bottom: 2rem;">
     <h3 style="color: var(--text-bright); margin-bottom: 1rem;"><i class="fa-solid fa-user-plus" style="color: var(--accent);"></i> Registrar Nuevo Cliente</h3>
     <form action="clientes.php" method="POST" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
@@ -93,7 +83,6 @@ if (empty($clientes)) {
         </div>
     </form>
 </div>
-
 <h3 style="color: var(--text-bright); margin-bottom: 1rem;"><i class="fa-solid fa-address-book" style="color: var(--accent);"></i> Clientes Registrados</h3>
 <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 14px; overflow-x: auto;">
     <table style="width: 100%; border-collapse: collapse; text-align: left; color: var(--text-main);">
@@ -121,5 +110,4 @@ if (empty($clientes)) {
         </tbody>
     </table>
 </div>
-
 <?php require_once __DIR__ . '/footer.php'; ?>

@@ -2,27 +2,21 @@
 $pageTitle = "Registro de Ventas - Ferretería De La Rosa";
 $extraCss = "productos.css";
 require_once __DIR__ . '/header.php';
-
 if (!isset($_SESSION['usuario_id'])) {
     echo "<div style='text-align:center; padding:3rem;'><h2>Acceso Restringido</h2><p>Inicia sesión para ingresar ventas.</p><a href='login.php' class='btn-nav-accent' style='display:inline-block; margin-top:1rem; padding:0.6rem 1.2rem; border-radius:8px;'>Iniciar Sesión</a></div>";
     require_once __DIR__ . '/footer.php';
     exit;
 }
-
 $mensaje = "";
 $error = "";
-
-// Cargar listas
 $prods = [];
 $clis = [];
 if ($db_connected) {
     $resP = $conn->query("SELECT * FROM productos WHERE stock > 0 ORDER BY nombre ASC");
     if ($resP) while ($r = $resP->fetch_assoc()) $prods[] = $r;
-
     $resC = $conn->query("SELECT * FROM clientes ORDER BY nombre ASC");
     if ($resC) while ($r = $resC->fetch_assoc()) $clis[] = $r;
 }
-
 if (empty($prods)) {
     $prods = [
         ['id' => 1, 'nombre' => 'Bomba de Agua Periférica', 'precio' => 89.99, 'stock' => 15],
@@ -30,16 +24,12 @@ if (empty($prods)) {
         ['id' => 3, 'nombre' => 'Juego de Llaves Combinadas', 'precio' => 45.00, 'stock' => 20]
     ];
 }
-
-// Procesar Venta
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $prod_id  = (int)($_POST['producto_id'] ?? 0);
     $cant     = (int)($_POST['cantidad'] ?? 1);
     $cliente  = !empty($_POST['cliente_id']) ? (int)$_POST['cliente_id'] : "NULL";
     $metodo   = $_POST['metodo_pago'] ?? 'efectivo';
-
     if ($prod_id > 0 && $cant > 0) {
-        // Obtener precio del producto
         $precioUnit = 0;
         foreach ($prods as $p) {
             if ($p['id'] == $prod_id) {
@@ -49,13 +39,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         $total = $precioUnit * $cant;
         $user_id = $_SESSION['usuario_id'];
-
         if ($db_connected) {
             $conn->query("INSERT INTO ventas (usuario_id, cliente_id, total, metodo_pago) VALUES ($user_id, $cliente, $total, '$metodo')");
             $v_id = $conn->insert_id;
             $conn->query("INSERT INTO detalle_ventas (venta_id, producto_id, cantidad, precio_unitario, subtotal) VALUES ($v_id, $prod_id, $cant, $precioUnit, $total)");
             $conn->query("UPDATE productos SET stock = stock - $cant WHERE id = $prod_id");
-            $mensaje = "¡Venta registrada con éxito! Factura #$v_id generada por $$total";
+            $mensaje = "¡Venta registrada con éxito! Factura
         } else {
             $mensaje = "¡Venta de prueba registrada correctamente por $$total! (Modo Demo)";
         }
@@ -63,8 +52,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = "Selecciona un producto y cantidad válida.";
     }
 }
-
-// Cargar ultimas ventas
 $ventasHistorial = [];
 if ($db_connected) {
     $q = "SELECT v.id, v.total, v.metodo_pago, v.fecha, u.nombre as usuario, c.nombre as cliente 
@@ -76,19 +63,16 @@ if ($db_connected) {
     if ($resV) while ($r = $resV->fetch_assoc()) $ventasHistorial[] = $r;
 }
 ?>
-
 <div class="catalog-hero">
     <div class="hero-badge"><i class="fa-solid fa-cash-register"></i> Módulo Ventas & Facturación</div>
     <h2>Registro de Ventas y Emisión de Comprobantes</h2>
     <p>Ingresa facturas, selecciona métodos de pago y descuenta automáticamente del inventario.</p>
 </div>
-
 <?php if ($mensaje): ?>
     <div style="background: rgba(16,185,129,0.15); color: #10B981; border: 1px solid #10B981; padding: 0.75rem 1rem; border-radius: 8px; margin-bottom: 1.5rem;">
         <i class="fa-solid fa-circle-check"></i> <?php echo htmlspecialchars($mensaje); ?>
     </div>
 <?php endif; ?>
-
 <div style="background: var(--bg-card); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 14px; margin-bottom: 2rem;">
     <h3 style="color: var(--text-bright); margin-bottom: 1rem;"><i class="fa-solid fa-cart-plus" style="color: var(--accent);"></i> Registrar Nueva Venta</h3>
     <form action="ventas.php" method="POST" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
@@ -128,7 +112,6 @@ if ($db_connected) {
         </div>
     </form>
 </div>
-
 <h3 style="color: var(--text-bright); margin-bottom: 1rem;"><i class="fa-solid fa-history" style="color: var(--accent);"></i> Historial Reciente de Ventas</h3>
 <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 14px; overflow-x: auto;">
     <table style="width: 100%; border-collapse: collapse; text-align: left; color: var(--text-main);">
@@ -160,5 +143,4 @@ if ($db_connected) {
         </tbody>
     </table>
 </div>
-
 <?php require_once __DIR__ . '/footer.php'; ?>

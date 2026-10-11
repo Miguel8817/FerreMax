@@ -1,7 +1,5 @@
 <?php
 require_once __DIR__ . '/config.php';
-
-// Detectar la página actual
 $currentPage = basename($_SERVER['PHP_SELF']);
 $rol = $_SESSION['usuario_rol'] ?? 'invitado';
 $nombreUsuario = $_SESSION['usuario_nombre'] ?? '';
@@ -12,14 +10,12 @@ $nombreUsuario = $_SESSION['usuario_nombre'] ?? '';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo isset($pageTitle) ? $pageTitle : 'FerreMax'; ?></title>
-    <!-- Estilos Base Globales (Emeli: Azul Oscuro y Gris) -->
     <link rel="stylesheet" href="Css/global.css">
     <?php if (isset($extraCss)): ?>
         <link rel="stylesheet" href="Css/<?php echo $extraCss; ?>">
     <?php endif; ?>
 </head>
 <body>
-
     <header class="header">
         <div class="header-container">
             <a href="index.php" class="logo-brand">
@@ -35,7 +31,6 @@ $nombreUsuario = $_SESSION['usuario_nombre'] ?? '';
                 <a href="inventario.php" class="nav-link <?php echo $currentPage == 'inventario.php' ? 'active' : ''; ?>">
                     Inventario
                 </a>
-
                 <?php if (isset($_SESSION['usuario_id'])): ?>
                     <a href="ventas.php" class="nav-link <?php echo $currentPage == 'ventas.php' ? 'active' : ''; ?>">
                         Ventas
@@ -46,18 +41,12 @@ $nombreUsuario = $_SESSION['usuario_nombre'] ?? '';
                     <a href="reportes.php" class="nav-link <?php echo $currentPage == 'reportes.php' ? 'active' : ''; ?>">
                         Reportes
                     </a>
-
                     <?php if ($rol === 'admin'): ?>
                         <a href="usuarios.php" class="nav-link <?php echo $currentPage == 'usuarios.php' ? 'active' : ''; ?>">
                             Usuarios
                         </a>
                     <?php endif; ?>
                 <?php endif; ?>
-
-                <a href="creditos.php" class="nav-link <?php echo $currentPage == 'creditos.php' ? 'active' : ''; ?>">
-                    Créditos
-                </a>
-
                 <?php if (isset($_SESSION['usuario_nombre'])): ?>
                     <span class="user-badge" title="Rol: <?php echo ucfirst($rol); ?>">
                         <?php echo htmlspecialchars($nombreUsuario); ?> (<?php echo ucfirst($rol); ?>)
@@ -74,5 +63,4 @@ $nombreUsuario = $_SESSION['usuario_nombre'] ?? '';
             </nav>
         </div>
     </header>
-
     <main class="main-content">
